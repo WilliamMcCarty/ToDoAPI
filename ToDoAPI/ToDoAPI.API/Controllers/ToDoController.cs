@@ -18,8 +18,6 @@ namespace ToDoAPI.API.Controllers
        
         public IHttpActionResult GetToDos()
         {
-            //List<ToDoItemViewModel> todos = db.ToDoItems.Include("Category").Select(t => new ToDoItemViewModel() { }).ToList();
-
             List<ToDoItemViewModel> todos = db.ToDoItems.Include("Category").Select(t => new ToDoItemViewModel()
             {
                 TodoId = t.TodoId,
