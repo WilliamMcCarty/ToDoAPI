@@ -88,14 +88,44 @@ namespace ToDoAPI.API.Controllers
             return Ok(newToDo);
         }
 
-        public IHttpActionResult PutToDo()
+        public IHttpActionResult PutToDo(ToDoItemViewModel todo)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
 
+            ToDoItem existingResource = db.ToDoItems.Where(t => t.TodoId == todo.TodoId).FirstOrDefault();
+
+            if (existingResource != null)
+            {
+                existingResource.TodoId = todo.TodoId;
+                existingResource.Action = todo.Action;
+                existingResource.Done = todo.Done;
+                existingResource.CategoryId = todo.CategoryId;
+                db.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
-        public IHttpActionResult DeleteToDo()
+        public IHttpActionResult DeleteToDo(int id)
         {
+            ToDoItem todo = db.ToDoItems.Where(t => t.TodoId == id).FirstOrDefault();
 
+            if (todo != null)
+            {
+                db.ToDoItems.Remove(todo);
+                db.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         protected override void Dispose(bool disposing)
